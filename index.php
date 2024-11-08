@@ -2,7 +2,7 @@
 $nomeBanco = 'meu_banco.db';
 require 'sql_dao.php';
 
-$mensagemErro = ''; // Variável para armazenar a mensagem de erro
+$mensagemErro = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];

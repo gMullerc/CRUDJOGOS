@@ -58,6 +58,21 @@ function buscarJogos() {
     return $jogos;
 }
 
+function buscarJogoPorId($id) {
+    global $nomeBanco;
+    $db = new SQLite3($nomeBanco);
+
+    $query = "SELECT * FROM jogos WHERE id = :id";
+    $stmt = $db->prepare($query);
+    $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+    $result = $stmt->execute();
+
+    $jogo = $result->fetchArray(SQLITE3_ASSOC);
+
+    $db->close();
+    return $jogo;
+}
+
 function adicionarJogo($nome, $data_criacao, $descricao, $estilo_jogo, $indicacao_idade) {
     global $nomeBanco;
     $db = new SQLite3($nomeBanco);
@@ -72,5 +87,33 @@ function adicionarJogo($nome, $data_criacao, $descricao, $estilo_jogo, $indicaca
     $db->close();
 }
 
+function excluirJogo($id) {
+
+    global $nomeBanco;
+    $db = new SQLite3($nomeBanco);
+    
+    $query = "DELETE FROM jogos WHERE id = :id";
+
+    $stmt = $db->prepare($query);
+
+    $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+
+    $stmt->execute();
+} 
+
+function atualizarJogo($id, $nome, $data_criacao, $descricao, $estilo_jogo, $indicacao_idade) {
+    global $nomeBanco;
+    $db = new SQLite3($nomeBanco);
+    $query = "UPDATE jogos SET nome = :nome, data_criacao = :data_criacao, descricao = :descricao, estilo_jogo = :estilo_jogo, indicacao_idade = :indicacao_idade WHERE id = :id";
+    $stmt = $db->prepare($query);
+    $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+    $stmt->bindValue(':nome', $nome, SQLITE3_TEXT);
+    $stmt->bindValue(':data_criacao', $data_criacao, SQLITE3_TEXT);
+    $stmt->bindValue(':descricao', $descricao, SQLITE3_TEXT);
+    $stmt->bindValue(':estilo_jogo', $estilo_jogo, SQLITE3_TEXT);
+    $stmt->bindValue(':indicacao_idade', $indicacao_idade, SQLITE3_TEXT);
+    $stmt->execute();
+    $db->close();
+}
 inicializarBanco();
 ?>
